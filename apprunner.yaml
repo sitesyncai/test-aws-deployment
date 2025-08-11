@@ -1,0 +1,20 @@
+version: 1.0
+runtime: docker
+build:
+  commands:
+    build:
+      - echo "Build started on `date`"
+      - echo "Building the Docker image..."
+      - docker build -t fastapi-app .
+      - echo "Build completed on `date`"
+run:
+  runtime-version: latest
+  command: python main.py
+  network:
+    port: 8000
+    env: PORT
+  env:
+    - name: ENVIRONMENT
+      value: production
+    - name: PORT
+      value: "8000"
