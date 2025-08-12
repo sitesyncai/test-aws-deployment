@@ -1,20 +1,13 @@
+# The version of the apprunner.yaml format
 version: 1.0
-runtime: docker
-build:
-  commands:
-    build:
-      - echo "Build started on `date`"
-      - echo "Building the Docker image..."
-      - docker build -t fastapi-app .
-      - echo "Build completed on `date`"
+
+# This section tells App Runner HOW to run your application AFTER it's been built.
 run:
-  runtime-version: latest
-  command: python main.py
+  # The command to start your application inside the container.
+  # This should match the CMD in your Dockerfile, but it's good practice to be explicit.
+  command: uvicorn main:app --host 0.0.0.0 --port 8000
+
+  # The network port your application listens on.
+  # This MUST match the port in the command above and the EXPOSE in your Dockerfile.
   network:
     port: 8000
-    env: PORT
-  env:
-    - name: ENVIRONMENT
-      value: production
-    - name: PORT
-      value: "8000"
