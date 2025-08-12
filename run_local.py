@@ -6,8 +6,10 @@ Run this script to start the development server with hot reload
 
 import uvicorn
 import os
-
+print("this is to check if the file is running")
+print(__name__)
 if __name__ == "__main__":
+    
     # Set development environment
     os.environ["ENVIRONMENT"] = "development"
     
