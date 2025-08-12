@@ -1,13 +1,36 @@
-# The version of the apprunner.yaml format
+# apprunner.yaml for SOURCE CODE deployment (not Docker)
 version: 1.0
 
-# This section tells App Runner HOW to run your application AFTER it's been built.
-run:
-  # The command to start your application inside the container.
-  # This should match the CMD in your Dockerfile, but it's good practice to be explicit.
-  command: uvicorn main:app --host 0.0.0.0 --port 8000
+# Build phase - install dependencies
+build:
+  commands:
+    build:
+      - pip install -r requirements.txt
+    pre-build:
+      - echo "Pre-build phase - setting up Python environment"
+    post-build:
+      - echo "Build completed successfully"
 
-  # The network port your application listens on.
-  # This MUST match the port in the command above and the EXPOSE in your Dockerfile.
+# Runtime configuration for Python
+run:
+  # Python runtime version
+  runtime-version: python3.11
+
+  # Command to start your FastAPI application
+  command: python -m uvicorn main:app --host 0.0.0.0 --port 8000
+
+  # Environment variables
+  env:
+    - name: PORT
+      value: "8000"
+    - name: ENVIRONMENT
+      value: "production"
+    - name: PYTHONUNBUFFERED
+      value: "1"
+    - name: PYTHONDONTWRITEBYTECODE
+      value: "1"
+
+  # Network configuration
   network:
     port: 8000
+    env: PORT
